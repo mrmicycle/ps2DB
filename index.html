@@ -1,0 +1,68 @@
+<html>
+<head>
+<script>
+    // ajax javascript
+    // this first function is to load the database onto the page when it loads. Should only run on refresh. limit to 30 items at all times.
+    function showTableOnLoad()
+    {
+        var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function ()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("txtHint").innerHTML = this.responseText;
+                }
+            };
+            xmlhttp.open("GET","http://localhost/dashboard/work/ps2DB/getdata.php?showall",true);
+            xmlhttp.send();
+
+    }
+    // function uses AJAX to send query to php file, which will query db and send back results.
+    function searchTable()
+    {
+        // "myId" is used to reference the div that contains the text input box.
+        str = document.getElementById("myId").value;
+        // log the str to the console so i can see it.
+        console.log(str);
+        // alert(str);
+        if (str != "")
+        {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function ()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("txtHint").innerHTML = this.responseText;
+                }
+            };
+            xmlhttp.open("GET","http://localhost/dashboard/work/ps2DB/getdata.php?kw="+str,true);
+            xmlhttp.send();
+        }
+        // when the user has not typed anything, show everything in the database.
+        else
+        {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function ()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("txtHint").innerHTML = this.responseText;
+                }
+            };
+            xmlhttp.open("GET","http://localhost/dashboard/work/ps2DB/getdata.php?showall",true);
+            xmlhttp.send();
+        }
+    }
+    // this line runs the function on load / refresh
+    window.onload = showTableOnLoad;
+</script>
+</head>
+<body>
+    <!-- "myId" is a reference point for the "searchTable" function above. 
+    on input means that with every letter typed, searchTable is called. -->
+    <h3>Enter search term. Click on ID to modify.</h3>
+    <input type="text" id="myId" oninput="searchTable();" />
+    <br>
+    <div id="txtHint"><b></b></div>
+</body>
+</html>
